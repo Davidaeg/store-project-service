@@ -1,17 +1,42 @@
-import express from "express";
+import express, { json } from "express";
+import { createProductRouter } from "./routes/products.ts";
+import { corsMiddleware } from "./middlewares/cors.ts";
+import "dotenv/config";
+import { ProductModel } from "./models/product.ts";
 
-const app = express();
+export class App {
+  private productModel: ProductModel;
+  private app: express.Express;
 
-app.use(express.json()); //middleware to parse json body
+  constructor(productModel: ProductModel) {
+    this.productModel = productModel;
+    this.app = express();
+    this.setupMiddleware();
+    this.setupRoutes();
+  }
 
-const PORT = 3000;
+  private setupMiddleware() {
+    this.app.use(json());
+    this.app.use(corsMiddleware());
+    this.app.disable("x-powered-by");
+  }
 
-app.get("/ping", (_req, res) => {
-  console.log("ping");
+  private setupRoutes() {
+    this.app.use(
+      "/products",
+      createProductRouter({ productModel: this.productModel })
+    );
+  }
 
-  res.send("Hello World!");
-});
+  public listen() {
+    const PORT = process.env.PORT ?? 1234;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+    this.app.listen(PORT, () => {
+      console.log(`server listening on port http://localhost:${PORT}`);
+    });
+  }
+}
+
+const productModel = new ProductModel();
+const app = new App(productModel);
+app.listen();
