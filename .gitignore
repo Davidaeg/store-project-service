@@ -30,3 +30,6 @@ graphql.schema.json
 
 #certs
 .cert
+
+#test
+/src/http
