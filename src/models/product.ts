@@ -22,10 +22,10 @@ export class ProductModel {
   }
 
   async getAll() {
-    let products = await this.pool
+    const products = await this.pool
       .request()
       .query("SELECT * from ProductsTest");
-    return products.recordsets;
+    return products.recordset;
   }
 
   async getById({ id }: { id: number }) {
