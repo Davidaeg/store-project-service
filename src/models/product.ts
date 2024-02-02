@@ -9,6 +9,8 @@ export type Product = {
   name: string;
   description: string;
   price: number;
+  image?: string;
+  iventoryStatus?: string;
 };
 
 export class ProductModel {
