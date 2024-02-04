@@ -39,13 +39,13 @@ export class ProductModel {
   }
 
   async create(product: Product) {
-    const newMovie = {
+    const newProduct = {
       ...product,
     };
 
-    products.push(newMovie);
+    products.push(newProduct);
 
-    return newMovie;
+    return newProduct;
   }
 
   async delete({ id }: { id: number }) {

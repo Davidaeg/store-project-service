@@ -7,10 +7,10 @@ const productSchema = z.object({
   price: z.number().positive(),
 });
 
-export function validateMovie(input: any) {
+export function validateProduct(input: any) {
   return productSchema.safeParse(input);
 }
 
-export function validatePartialMovie(input: any) {
+export function validatePartialProduct(input: any) {
   return productSchema.partial().safeParse(input);
 }
