@@ -1,5 +1,5 @@
-import { UsersModel } from "models/user/user";
 import { randomBytes, scrypt as _scrypt } from "crypto";
+import { UsersModel } from "models/user/user";
 import { promisify } from "util";
 
 const scrypt = promisify(_scrypt);
