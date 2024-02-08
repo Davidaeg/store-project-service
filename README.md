@@ -8,15 +8,17 @@ The main entry point for this application is `index.ts`.
 
 ## SetUp the project
 
-In Order to run the project create an .env file with the following data (replace with your db info)
+First, run the scripts you can find in DB folder in your MSSQL instance.
+
+Then, In Order to run the project create an .env file with the following data (replace with your db info)
 
 ```
-PORT=3000 //The port where you want to run the backEnd
+PORT=3000 #The port where you want to run the backEnd
 DB_NAME=<dbname>
 DB_USER=<dbuser>
 DB_PASSWORD=<dbpassword>
 DB_HOST=localhost
-DB_PORT=1433 // mssql default port
+DB_PORT=1433 #mssql default port
 ```
 
 - Execute `npm i` to install all dependencies.
