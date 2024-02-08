@@ -1,3 +1,9 @@
+export enum Location {
+  Shelf1 = "Shelf1",
+  Shelf2 = "Shelf2",
+  Shelf3 = "Shelf3",
+}
+
 export interface Product {
   productId: number;
   name: string;
@@ -5,7 +11,7 @@ export interface Product {
   stock: number;
   price: number;
   priceWithIva: number;
-  location: string;
+  location: Location;
 }
 
 export interface CreateProduct {
@@ -14,5 +20,5 @@ export interface CreateProduct {
   stock: number;
   price: number;
   priceWithIva: number;
-  location: string;
+  location: Location;
 }

@@ -26,7 +26,7 @@ VALUES (1, GETDATE(), 'InPreparation');
 INSERT INTO Product (name, image, stock, price, priceWithIva, location)
 VALUES ('Product 1', 'prod1.webp', 10, 9.99, 11.99, 'Shelf1'), 
 ('Product 2', 'prod2.webp', 10, 10.99, 12.99, 'Shelf2'), (
-    'Product 2', 'prod12.webp', 10, 11.99, 13.99, 'Shelf3');
+    'Product 3', 'prod3.webp', 10, 11.99, 13.99, 'Shelf3');
 
 -- Insert into OrderDetail
 INSERT INTO OrderDetail (orderId, productId)

@@ -58,12 +58,17 @@ export class ProductController {
     }
 
     const { id } = req.params;
-
-    const updatedProduct = await this.productModel.update({
-      id: Number(id),
-      input: result.data,
-    });
-
-    return res.json(updatedProduct);
+    try {
+      const updatedProduct = await this.productModel.update({
+        ...result.data,
+        productId: Number(id),
+      });
+      return res.json(updatedProduct);
+    } catch (error) {
+      console.log("Error updating product[Product Controller]:", error);
+      return res
+        .status(500)
+        .json({ message: "Error al actualizar el producto" });
+    }
   };
 }

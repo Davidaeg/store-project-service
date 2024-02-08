@@ -1,3 +1,4 @@
+import { Location } from "../models/product/product.entity";
 import z from "zod";
 
 export const CreateProductDto = z.object({
@@ -13,7 +14,7 @@ export const CreateProductDto = z.object({
   priceWithIva: z
     .number()
     .nonnegative({ message: "Price with IVA must be a non-negative number" }),
-  location: z.string().min(1, { message: "Location is required" }),
+  location: z.nativeEnum(Location),
 });
 
 export function validateProduct(input: any) {

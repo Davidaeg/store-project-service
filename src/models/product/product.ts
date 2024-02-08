@@ -4,14 +4,8 @@ import { CreateProduct, Product } from "./product.entity.ts";
 export class ProductModel {
   constructor(private pool: ConnectionPool) {}
 
-  // private async initializePool() {
-  //   this.pool = await Database.getPool();
-  // }
-
   async getAll() {
-    const products = await this.pool
-      .request()
-      .query("SELECT * from ProductsTest");
+    const products = await this.pool.request().query("SELECT * from Product");
     return products.recordset;
   }
 
@@ -19,7 +13,7 @@ export class ProductModel {
     const product = await this.pool
       .request()
       .input("input_parameter", sql.Int, id)
-      .query("SELECT * from Orders where Id = @input_parameter");
+      .query("SELECT * from Product where Id = @input_parameter");
     return product.recordsets;
   }
 
@@ -37,7 +31,9 @@ export class ProductModel {
         .input("PriceWithIva", sql.Decimal, newProduct.priceWithIva)
         .input("Location", sql.VarChar, newProduct.location)
         .query(
-          "INSERT INTO ProductsTest (Name, Image, Stock, Price, PriceWithIva, Location) VALUES (@Name, @Image, @Stock, @Price, @PriceWithIva, @Location)"
+          `INSERT INTO Product (Name, Image, Stock, Price, PriceWithIva, Location) 
+          OUTPUT inserted.productId 
+          VALUES (@Name, @Image, @Stock, @Price, @PriceWithIva, @Location)`
         );
       return createdProduct.recordset[0];
     } catch (error) {
@@ -50,23 +46,29 @@ export class ProductModel {
     const result = await this.pool
       .request()
       .input("input_parameter", sql.Int, id)
-      .query("DELETE from ProductsTest where Id = @input_parameter");
+      .query("DELETE from Product where Id = @input_parameter");
     return result.rowsAffected[0] > 0 ? true : false;
   }
 
-  async update({ id, input }: { id: number; input: Partial<Product> }) {
-    const updatedProduct = await this.pool
-      .request()
-      .input("Id", sql.Int, id)
-      .input("Name", sql.VarChar, input.name)
-      .input("Image", sql.VarChar, input.image)
-      .input("Stock", sql.Int, input.stock)
-      .input("Price", sql.Decimal, input.price)
-      .input("PriceWithIva", sql.Decimal, input.priceWithIva)
-      .input("Location", sql.VarChar, input.location)
-      .query(
-        "UPDATE ProductsTest SET Name = @Name, Image = @Image, Stock = @Stock, Price = @Price, PriceWithIva = @PriceWithIva, Location = @Location WHERE Id = @Id"
-      );
-    return updatedProduct.recordset[0];
+  async update(input: Partial<Product>) {
+    try {
+      const updatedProduct = await this.pool
+        .request()
+        .input("Id", sql.Int, input.productId)
+        .input("Name", sql.VarChar, input.name)
+        .input("Image", sql.VarChar, input.image)
+        .input("Stock", sql.Int, input.stock)
+        .input("Price", sql.Decimal, input.price)
+        .input("PriceWithIva", sql.Decimal, input.priceWithIva)
+        .input("Location", sql.VarChar, input.location)
+        .query(
+          "UPDATE Product SET Name = @Name, Image = @Image, Stock = @Stock, Price = @Price, PriceWithIva = @PriceWithIva, Location = @Location WHERE Id = @Id"
+        );
+      console.log({ updatedProduct });
+    } catch (error) {
+      console.log("Error updating product[ProductModel]:", error);
+      throw error;
+    }
+    return input;
   }
 }
