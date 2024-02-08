@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ProductModel } from "../models/product.ts";
+import { ProductModel } from "../models/product/product.ts";
 import { validatePartialProduct, validateProduct } from "../schemas/product.ts";
 
 export class ProductController {
@@ -26,12 +26,16 @@ export class ProductController {
 
     if (!result.success) {
       // 422 Unprocessable Entity
-      return res.status(400).json({ error: JSON.parse(result.error.message) });
+      return res.status(422).json({ error: JSON.parse(result.error.message) });
     }
+    try {
+      const newProduct = await this.productModel.create(result.data);
 
-    const newProduct = await this.productModel.create(result.data);
-
-    res.status(201).json(newProduct);
+      res.status(201).json(newProduct);
+    } catch (error) {
+      console.log("Error creating product:", error);
+      res.status(500).json({ message: "Error creating product" });
+    }
   };
 
   delete = async (req: Request, res: Response) => {
@@ -50,7 +54,7 @@ export class ProductController {
     const result = validatePartialProduct(req.body);
 
     if (!result.success) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) });
+      return res.status(422).json({ error: JSON.parse(result.error.message) });
     }
 
     const { id } = req.params;

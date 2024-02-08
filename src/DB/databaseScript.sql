@@ -8,7 +8,7 @@ CREATE TABLE Person (
     firstLastName VARCHAR(50),
     secondLastName VARCHAR(50),
     birthday DATETIME,
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     phoneNumber VARCHAR(20),
     address VARCHAR(255)
 );
@@ -16,8 +16,8 @@ CREATE TABLE Person (
 CREATE TABLE [User] (
     userId INT PRIMARY KEY IDENTITY(1,1),
     personId INT,
-    username VARCHAR(50),
-    password VARCHAR(50),
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(255),
     FOREIGN KEY (personId) REFERENCES Person(personID)
 );
 
@@ -72,3 +72,6 @@ CREATE TABLE ProductColor (
     FOREIGN KEY (productId) REFERENCES Product(productId),
     FOREIGN KEY (colorId) REFERENCES Color(colorId)
 );
+
+ALTER TABLE OrderDetail add quantity INT;
+ALTER TABLE [User] ALTER COLUMN password VARCHAR (300) NOT NULL;
