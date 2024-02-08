@@ -6,10 +6,6 @@ VALUES ('John', 'Doe', 'Smith', '1980-01-01', 'john.doe@example.com', '123456789
 INSERT INTO Person (name, firstLastName, secondLastName, birthday, email, phoneNumber, address)
 VALUES ('David', 'Alvarado', 'Elizondo', '1997-10-21', 'davidaeg90@gmail.com', '84846089', 'Cartago');
 
--- Insert into User
-INSERT INTO [User] (personId, username, password)
-VALUES (1, 'johndoe', '12345');
-
 -- Insert into Customer
 INSERT INTO Customer (personId, category)
 VALUES (1, 'Cat1');
@@ -25,12 +21,14 @@ VALUES (1, GETDATE(), 'InPreparation');
 -- Insert into Product
 INSERT INTO Product (name, image, stock, price, priceWithIva, location)
 VALUES ('Product 1', 'prod1.webp', 10, 9.99, 11.99, 'Shelf1'), 
-('Product 2', 'prod2.webp', 10, 10.99, 12.99, 'Shelf2'), (
-    'Product 3', 'prod3.webp', 10, 11.99, 13.99, 'Shelf3');
+('Product 2', 'prod2.webp', 10, 10.99, 12.99, 'Shelf2'), 
+('Product 3', 'prod3.webp', 10, 11.99, 13.99, 'Shelf3'),
+('Product 4', 'prod4.webp', 10, 12.99, 14.99, 'Shelf3'),
+('Product 5', 'prod5.webp', 10, 13.99, 15.99, 'Shelf3');
 
 -- Insert into OrderDetail
-INSERT INTO OrderDetail (orderId, productId)
-VALUES (1, 1);
+INSERT INTO OrderDetail (orderId, productId, quantity)
+VALUES (1, 1, 1);
 
 -- Insert into Color
 INSERT INTO Color (color)
