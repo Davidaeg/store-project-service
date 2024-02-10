@@ -1,9 +1,17 @@
 import { ConnectionPool } from "mssql";
 import { CreateUserDto, User } from "./user.entity";
 import { Person } from "models/person/person.entity";
+import { Database } from "../../DB/DataBase";
 
 export class UsersModel {
-  constructor(private pool: ConnectionPool) {}
+  private pool!: ConnectionPool;
+  constructor() {
+    this.initDB();
+  }
+
+  async initDB() {
+    this.pool = await Database.getInstace().getPool();
+  }
 
   async create(attrs: CreateUserDto) {
     const person = await this.findPersonByEmail(attrs.username);

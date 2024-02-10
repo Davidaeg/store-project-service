@@ -1,8 +1,16 @@
 import sql, { ConnectionPool } from "mssql";
 import { CreateProduct, Product } from "./product.entity.ts";
+import { Database } from "../../DB/DataBase.ts";
 
 export class ProductModel {
-  constructor(private pool: ConnectionPool) {}
+  private pool!: ConnectionPool;
+  constructor() {
+    this.initDB();
+  }
+
+  async initDB() {
+    this.pool = await Database.getInstace().getPool();
+  }
 
   async getAll() {
     const products = await this.pool.request().query("SELECT * from Product");
