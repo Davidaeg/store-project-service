@@ -12,15 +12,15 @@ export const createUserRouter = ({
 }) => {
   const userRouter = Router();
 
-  const productsController = new UserController(userModel, authService);
+  const usersController = new UserController(userModel, authService);
 
-  userRouter.get("/", productsController.getAll);
-  userRouter.get("/:id", productsController.getById);
+  userRouter.get("/", usersController.getAll);
+  userRouter.get("/:id", usersController.getById);
 
-  userRouter.delete("/:id", productsController.delete);
-  //   productsRouter.patch("/:id", productsController.update);
-  userRouter.post("/signup", productsController.create);
-  userRouter.post("/signin", productsController.sigin);
+  userRouter.delete("/:id", usersController.delete);
+  //   productsRouter.patch("/:id", usersController.update);
+  userRouter.post("/signup", usersController.create);
+  userRouter.post("/signin", usersController.sigin);
 
   return userRouter;
 };

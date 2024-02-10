@@ -9,8 +9,8 @@ export class AuthService {
 
   async signup(email: string, password: string) {
     // See if email is in use
-    const users = await this.usersModel.findByEmail(email);
-    if (users) {
+    const user = await this.usersModel.findByEmail(email);
+    if (user) {
       throw new Error("El email ya esta en uso");
     }
 
@@ -25,13 +25,13 @@ export class AuthService {
     const result = salt + "." + hash.toString("hex");
 
     // Create a new user and save it
-    const user = await this.usersModel.create({
+    const newUser = await this.usersModel.create({
       username: email,
       password: result,
     });
 
     // return the user
-    return user;
+    return newUser;
   }
 
   async signin(email: string, password: string) {
