@@ -1,6 +1,6 @@
 import sql, { ConnectionPool } from "mssql";
 import { CreateProduct, Product } from "./product.entity.ts";
-import { Database } from "../../DB/DataBase.ts";
+import { Database } from "@DB/DataBase.ts";
 
 export class ProductModel {
   private pool!: ConnectionPool;
@@ -9,7 +9,7 @@ export class ProductModel {
   }
 
   async initDB() {
-    this.pool = await Database.getInstace().getPool();
+    this.pool = Database.getInstace().getPool();
   }
 
   async getAll() {

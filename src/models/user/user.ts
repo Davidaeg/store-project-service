@@ -1,7 +1,7 @@
 import { ConnectionPool } from "mssql";
 import { CreateUserDto, User } from "./user.entity";
 import { Person } from "models/person/person.entity";
-import { Database } from "../../DB/DataBase";
+import { Database } from "@DB/DataBase";
 
 export class UsersModel {
   private pool!: ConnectionPool;
@@ -10,7 +10,7 @@ export class UsersModel {
   }
 
   async initDB() {
-    this.pool = await Database.getInstace().getPool();
+    this.pool = Database.getInstace().getPool();
   }
 
   async create(attrs: CreateUserDto) {
