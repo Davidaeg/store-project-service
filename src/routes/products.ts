@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ProductController } from "../controllers/product.ts";
-import { ProductModel } from "../models/product.ts";
+import { ProductModel } from "models/product/product.ts";
 
 export const createProductRouter = ({
   productModel,
