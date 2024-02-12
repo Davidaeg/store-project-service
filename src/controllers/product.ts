@@ -31,10 +31,11 @@ export class ProductController {
     const result = validateProduct(req.body);
 
     if (!result.success) {
+      console.log(result.error.message);
       throw new ServerError({
         name: ErrorsName.UnprocessableEntityException,
         code: HTTP_STATUS.UNPROCESSABLE_ENTITY,
-        message: JSON.parse(result.error.message),
+        message: result.error.message,
         logging: true,
       });
     }
