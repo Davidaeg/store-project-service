@@ -1,10 +1,12 @@
 import express, { json } from "express";
+import "express-async-errors";
 import { createProductRouter } from "./routes/products.ts";
 import { corsMiddleware } from "./middlewares/cors.ts";
 import { ProductModel } from "./models/product/product.ts";
 import { UsersModel } from "./models/user/user.ts";
 import { AuthService } from "./auth/auth.service.ts";
 import { createUserRouter } from "./routes/user.ts";
+import { errorHandler } from "@middlewares/errors.ts";
 import "dotenv/config";
 
 export class App {
@@ -21,6 +23,7 @@ export class App {
 
   private setupMiddleware() {
     this.app.use(json());
+    this.app.use(errorHandler);
     this.app.use(corsMiddleware());
     this.app.disable("x-powered-by");
   }

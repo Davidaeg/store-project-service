@@ -21,8 +21,8 @@ export class ProductModel {
     const product = await this.pool
       .request()
       .input("input_parameter", sql.Int, id)
-      .query("SELECT * from Product where Id = @input_parameter");
-    return product.recordsets;
+      .query("SELECT * from Product where productId = @input_parameter");
+    return product.recordset[0];
   }
 
   async create(product: CreateProduct) {
