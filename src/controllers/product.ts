@@ -38,18 +38,10 @@ export class ProductController {
         logging: true,
       });
     }
-    try {
-      const newProduct = await this.productModel.create(result.data);
 
-      res.status(201).json(newProduct);
-    } catch (error) {
-      throw new ServerError({
-        name: ErrorsName.InternalServerError,
-        code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-        message: "Error creating product",
-        logging: true,
-      });
-    }
+    const newProduct = await this.productModel.create(result.data);
+
+    res.status(201).json(newProduct);
   };
 
   delete = async (req: Request, res: Response) => {
@@ -58,7 +50,12 @@ export class ProductController {
     const result = await this.productModel.delete({ id: Number(id) });
 
     if (result === false) {
-      return res.status(404).json({ message: "Product not found" });
+      throw new ServerError({
+        name: ErrorsName.NotFoundException,
+        code: HTTP_STATUS.NOT_FOUND,
+        message: "Product not found",
+        logging: true,
+      });
     }
 
     return res.json({ message: "Product deleted" });
@@ -68,23 +65,20 @@ export class ProductController {
     const result = validatePartialProduct(req.body);
 
     if (!result.success) {
-      return res.status(422).json({ error: JSON.parse(result.error.message) });
-    }
-
-    const { id } = req.params;
-    try {
-      const updatedProduct = await this.productModel.update({
-        ...result.data,
-        productId: Number(id),
-      });
-      return res.json(updatedProduct);
-    } catch (error) {
       throw new ServerError({
-        name: ErrorsName.InternalServerError,
-        code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-        message: "Error updating product",
+        name: ErrorsName.UnprocessableEntityException,
+        code: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+        message: JSON.parse(result.error.message),
         logging: true,
       });
     }
+
+    const { id } = req.params;
+
+    const updatedProduct = await this.productModel.update({
+      ...result.data,
+      productId: Number(id),
+    });
+    return res.json(updatedProduct);
   };
 }
