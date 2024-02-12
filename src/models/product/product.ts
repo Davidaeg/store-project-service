@@ -28,18 +28,15 @@ export class ProductModel {
   }
 
   async create(product: CreateProduct) {
-    const newProduct = {
-      ...product,
-    };
     try {
       const createdProduct = await this.pool
         .request()
-        .input("Name", sql.VarChar, newProduct.name)
-        .input("Image", sql.VarChar, newProduct.image)
-        .input("Stock", sql.Int, newProduct.stock)
-        .input("Price", sql.Decimal, newProduct.price)
-        .input("PriceWithIva", sql.Decimal, newProduct.priceWithIva)
-        .input("Location", sql.VarChar, newProduct.location)
+        .input("Name", sql.VarChar, product.name)
+        .input("Image", sql.VarChar, product.image)
+        .input("Stock", sql.Int, product.stock)
+        .input("Price", sql.Decimal, product.price)
+        .input("PriceWithIva", sql.Decimal, product.priceWithIva)
+        .input("Location", sql.VarChar, product.location)
         .query(
           `INSERT INTO Product (Name, Image, Stock, Price, PriceWithIva, Location) 
           OUTPUT inserted.productId 
@@ -77,7 +74,7 @@ export class ProductModel {
         .input("PriceWithIva", sql.Decimal, input.priceWithIva)
         .input("Location", sql.VarChar, input.location)
         .query(
-          "UPDATE Product SET Name = @Name, Image = @Image, Stock = @Stock, Price = @Price, PriceWithIva = @PriceWithIva, Location = @Location WHERE Id = @Id"
+          "UPDATE Product SET name = @Name, image = @Image, stock = @Stock, price = @Price, priceWithIva = @PriceWithIva, location = @Location WHERE productId = @Id"
         );
       console.log({ updatedProduct });
     } catch (error) {
