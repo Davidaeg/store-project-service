@@ -1,6 +1,8 @@
 import sql, { ConnectionPool } from "mssql";
 import { CreateProduct, Product } from "./product.entity.ts";
 import { Database } from "@DB/DataBase.ts";
+import ServerError from "@errors/ServerError.ts";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
 
 export class ProductModel {
   private pool!: ConnectionPool;
@@ -21,8 +23,8 @@ export class ProductModel {
     const product = await this.pool
       .request()
       .input("input_parameter", sql.Int, id)
-      .query("SELECT * from Product where Id = @input_parameter");
-    return product.recordsets;
+      .query("SELECT * from Product where productId = @input_parameter");
+    return product.recordset[0];
   }
 
   async create(product: CreateProduct) {
@@ -45,8 +47,13 @@ export class ProductModel {
         );
       return createdProduct.recordset[0];
     } catch (error) {
-      console.log("Error creating product:", error);
-      throw error;
+      throw new ServerError({
+        name: ErrorsName.InternalServerError,
+        code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        message: "Error creating product",
+        logging: true,
+        context: { error },
+      });
     }
   }
 
@@ -74,8 +81,13 @@ export class ProductModel {
         );
       console.log({ updatedProduct });
     } catch (error) {
-      console.log("Error updating product[ProductModel]:", error);
-      throw error;
+      throw new ServerError({
+        name: ErrorsName.InternalServerError,
+        code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        message: "Error updating product",
+        logging: true,
+        context: { error },
+      });
     }
     return input;
   }
