@@ -24,3 +24,7 @@ export function validateProduct(input: any) {
 export function validatePartialProduct(input: any) {
   return CreateProductDto.partial().safeParse(input);
 }
+
+export const validateId = (id: number) => {
+  return z.number().int().nonnegative().safeParse(id);
+};

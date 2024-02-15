@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { UsersModel } from "../models/user/user.ts";
 import { AuthService } from "../auth/auth.service.ts";
 import { validateUser } from "../schemas/user.ts";
+import ServerError from "@errors/ServerError.ts";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
 
 export class UserController {
   constructor(
@@ -36,8 +38,12 @@ export class UserController {
 
       res.status(201).json(user);
     } catch (error: any) {
-      console.error("Error creating user:", error.message);
-      res.status(500).json({ message: error.message });
+      throw new ServerError({
+        name: ErrorsName.InternalServerError,
+        code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        message: "Error creating user",
+        logging: true,
+      });
     }
   };
 
@@ -50,8 +56,12 @@ export class UserController {
         return res.status(404).json({ message: "Product not found" });
       }
     } catch (error) {
-      console.log("Error deleting product:", error);
-      return res.status(500).json({ message: "Error deleting product" });
+      throw new ServerError({
+        name: ErrorsName.InternalServerError,
+        code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        message: "Error deleting product",
+        logging: true,
+      });
     }
 
     return res.json({ message: "Product deleted" });
@@ -63,8 +73,12 @@ export class UserController {
       const user = await this.authService.signin(email, password);
       res.json(user);
     } catch (error) {
-      console.log("Error signing in:", error);
-      res.status(401).json({ message: "Error signing in" });
+      throw new ServerError({
+        name: ErrorsName.Unauthorized,
+        code: HTTP_STATUS.UNAUTHORIZED,
+        message: "Invalid email or password",
+        logging: true,
+      });
     }
   };
 }
