@@ -1,8 +1,10 @@
 import express, { json } from "express";
 import "express-async-errors";
 import { createProductRouter } from "./routes/products.ts";
+import { createPersonRouter } from "./routes/person.ts";
 import { corsMiddleware } from "./middlewares/cors.ts";
 import { ProductModel } from "./models/product/product.ts";
+import { PersonModel } from "./models/person/person.ts";
 import { UsersModel } from "./models/user/user.ts";
 import { AuthService } from "./auth/auth.service.ts";
 import { createUserRouter } from "./routes/user.ts";
@@ -14,7 +16,8 @@ export class App {
 
   constructor(
     private productModel: ProductModel,
-    private userMode: UsersModel
+    private userMode: UsersModel,
+    private personModel: PersonModel
   ) {
     this.app = express();
     this.setupMiddleware();
@@ -39,6 +42,10 @@ export class App {
         userModel: this.userMode,
         authService: new AuthService(this.userMode),
       })
+    );
+    this.app.use(
+      "/person",
+      createPersonRouter({ personModel: this.personModel })
     );
   }
 
