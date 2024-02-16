@@ -7,6 +7,7 @@ export interface Person {
   email: string;
   phoneNumber: string;
   address: string;
+  password: string;
 }
 
 export interface CreatePersonDto {
