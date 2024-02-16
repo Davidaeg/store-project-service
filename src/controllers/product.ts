@@ -5,11 +5,7 @@ import ServerError from "@errors/ServerError.ts";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
 
 export class ProductController {
-  private productModel: ProductModel;
-
-  constructor(productModel: ProductModel) {
-    this.productModel = productModel;
-  }
+  constructor(private productModel: ProductModel) {}
   getAll = async (_req: Request, res: Response) => {
     const products = await this.productModel.getAll();
     res.json(products);

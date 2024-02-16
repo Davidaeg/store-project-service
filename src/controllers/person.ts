@@ -5,12 +5,7 @@ import ServerError from "@errors/ServerError.ts";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
 
 export class PersonController {
-  private personModel: PersonModel;
-
-  constructor(personModel: PersonModel) {
-    this.personModel = personModel;
-  }
-
+  constructor(private personModel: PersonModel) {}
   getAll = async (_req: Request, res: Response) => {
     const person = await this.personModel.getAll();
     res.json(person);
