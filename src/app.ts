@@ -45,7 +45,10 @@ export class App {
     );
     this.app.use(
       "/person",
-      createPersonRouter({ personModel: this.personModel })
+      createPersonRouter({
+        personModel: this.personModel,
+        authService: new AuthService(this.userMode),
+      })
     );
   }
 

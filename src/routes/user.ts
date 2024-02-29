@@ -20,7 +20,7 @@ export const createUserRouter = ({
   userRouter.delete("/:id", usersController.delete);
   //   productsRouter.patch("/:id", usersController.update);
   userRouter.post("/signup", usersController.create);
-  userRouter.post("/signin", usersController.sigin);
+  userRouter.post("/signin", usersController.signin);
 
   return userRouter;
 };

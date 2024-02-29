@@ -12,15 +12,15 @@ export class UserController {
     private authService: AuthService
   ) {}
   getAll = async (_req: Request, res: Response) => {
-    const products = await this.userModel.getAll();
-    res.json(products);
+    const User = await this.userModel.getAll();
+    res.json(User);
   };
 
   getById = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const product = await this.userModel.findByPersonId({ id: Number(id) });
-    if (product) return res.json(product);
-    res.status(404).json({ message: "Product not found" });
+    const user = await this.userModel.findByPersonId({ id: Number(id) });
+    if (user) return res.json(user);
+    res.status(404).json({ message: "user not found" });
   };
 
   create = async (req: Request, res: Response) => {
@@ -53,21 +53,21 @@ export class UserController {
       const result = await this.userModel.remove({ id: Number(id) });
 
       if (!result) {
-        return res.status(404).json({ message: "Product not found" });
+        return res.status(404).json({ message: "user not found" });
       }
     } catch (error) {
       throw new ServerError({
         name: ErrorsName.InternalServerError,
         code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-        message: "Error deleting product",
+        message: "Error deleting user",
         logging: true,
       });
     }
 
-    return res.json({ message: "Product deleted" });
+    return res.json({ message: "user deleted" });
   };
 
-  sigin = async (req: Request, res: Response) => {
+  signin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
       const user = await this.authService.signin(email, password);
