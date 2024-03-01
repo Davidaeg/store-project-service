@@ -40,7 +40,7 @@ export class PersonModel {
         .input("Address", sql.VarChar, person.address)
         .query(
           `INSERT INTO Person (name, firstLastName, secondLastName, birthday, email, phoneNumber, address) 
-          OUTPUT inserted.personId 
+          OUTPUT inserted.personId, inserted.email
           VALUES (@Name, @FirstLastName, @SecondLastName, @Birthday, @Email, @PhoneNumber, @Address)`
         );
       return createPerson.recordset[0];
@@ -83,7 +83,7 @@ export class PersonModel {
       throw new ServerError({
         name: ErrorsName.InternalServerError,
         code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-        message: "Error updating product",
+        message: "Error updating person",
         logging: true,
         context: { error },
       });

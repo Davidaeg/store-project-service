@@ -61,8 +61,8 @@ export class UsersModel {
   }
 
   async getAll() {
-    const users = await this.pool.request().query("SELECT * FROM [User]");
-    return users.recordset as User[];
+    const user = await this.pool.request().query("SELECT * FROM [User]");
+    return user.recordset as User[];
   }
 
   async findByEmail(email: string) {

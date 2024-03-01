@@ -18,6 +18,7 @@ export const CreatePersonSchema = z.object({
   email: z.string().email({ message: "Invalid email format" }),
   phoneNumber: z.string().min(1, { message: "Phone number is required" }),
   address: z.string().min(1, { message: "Address is required" }),
+  password: z.string().min(1, { message: "Password is required" }),
 });
 
 export function validatePerson(input: any) {

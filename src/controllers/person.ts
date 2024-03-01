@@ -3,9 +3,14 @@ import { PersonModel } from "../models/person/person.ts";
 import { validatePartialPerson, validatePerson } from "../schemas/person.ts";
 import ServerError from "@errors/ServerError.ts";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
+import { AuthService } from "@auth/auth.service.ts";
 
 export class PersonController {
-  constructor(private personModel: PersonModel) {}
+  constructor(
+    private personModel: PersonModel,
+    private authService: AuthService
+  ) {}
+
   getAll = async (_req: Request, res: Response) => {
     const person = await this.personModel.getAll();
     res.json(person);
@@ -36,8 +41,11 @@ export class PersonController {
     }
 
     const newPerson = await this.personModel.create(result.data);
-
-    res.status(201).json(newPerson);
+    const newUser = await this.authService.signup(
+      newPerson.email,
+      result.data.password
+    );
+    res.status(201).json({ newPerson, newUser });
   };
 
   delete = async (req: Request, res: Response) => {
