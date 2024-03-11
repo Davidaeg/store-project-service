@@ -1,0 +1,17 @@
+GET http://localhost:3000/products
+
+###
+
+GET http://localhost:3000/products/search/Pro
+
+###
+
+GET http://localhost:3000/products/1
+
+###
+
+GET http://localhost:3000/products/asc/price
+
+###
+
+GET http://localhost:3000/products/desc/price

@@ -88,4 +88,27 @@ export class ProductModel {
     }
     return input;
   }
+
+  async filterByName({ name }: { name: string }) {
+    const products = await this.pool
+      .request()
+      .input("input_parameter", sql.VarChar, "%" + name + "%")
+      .query("SELECT * FROM Product p WHERE p.name like @input_parameter");
+    return products.recordset;
+  }
+
+  async orderByPriceAsc() {
+    const products = await this.pool
+      .request()
+      .query("SELECT * FROM Product p ORDER BY PRICE ASC;");
+    console.log(products);
+    return products.recordset;
+  }
+
+  async orderByPriceDesc() {
+    const products = await this.pool
+      .request()
+      .query("SELECT * FROM Product p ORDER BY PRICE DESC;");
+    return products.recordset;
+  }
 }
