@@ -23,5 +23,6 @@ export const createProductRouter = ({
   productsRouter.get("/asc/price", productsController.orderByPriceAsc);
   productsRouter.get("/desc/price", productsController.orderByPriceDesc);
 
+  //returning end points
   return productsRouter;
 };
