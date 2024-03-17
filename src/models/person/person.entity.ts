@@ -18,4 +18,5 @@ export interface CreatePersonDto {
   phoneNumber: string;
   address: string;
   password: string;
+  userType: string;
 }
