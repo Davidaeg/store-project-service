@@ -40,11 +40,32 @@ export class PersonModel {
         .input("Address", sql.VarChar, person.address)
         .query(
           `INSERT INTO Person (name, firstLastName, secondLastName, birthday, email, phoneNumber, address) 
-          OUTPUT inserted.personId, inserted.email
-          VALUES (@Name, @FirstLastName, @SecondLastName, @Birthday, @Email, @PhoneNumber, @Address)`
+                OUTPUT inserted.personId, inserted.email
+                VALUES (@Name, @FirstLastName, @SecondLastName, @Birthday, @Email, @PhoneNumber, @Address)`
         );
-      return createPerson.recordset[0];
+
+      const newPerson = createPerson.recordset[0];
+
+      if (person.userType === "customer") {
+        await this.pool
+          .request()
+          .input("personId", newPerson.personId)
+          .query(
+            `INSERT INTO Customer (personId)
+                    VALUES (@personId)`
+          );
+      } else if (person.userType === "employee") {
+        await this.pool
+          .request()
+          .input("personId", newPerson.personId)
+          .query(
+            `INSERT INTO Employee (personId)
+                    VALUES (@personId)`
+          );
+      }
+      return newPerson;
     } catch (error) {
+      console.error("Error creating person:", error);
       throw new ServerError({
         name: ErrorsName.InternalServerError,
         code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
