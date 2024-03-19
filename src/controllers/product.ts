@@ -6,6 +6,7 @@ import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
 
 export class ProductController {
   constructor(private productModel: ProductModel) {}
+
   getAll = async (_req: Request, res: Response) => {
     const products = await this.productModel.getAll();
     res.json(products);
@@ -76,5 +77,41 @@ export class ProductController {
       productId: Number(id),
     });
     return res.json(updatedProduct);
+  };
+
+  filterByName = async (req: Request, res: Response) => {
+    const { name } = req.params;
+    const products = await this.productModel.filterByName({
+      name: String(name),
+    });
+    if (products) return res.json(products);
+    throw new ServerError({
+      name: ErrorsName.NotFoundException,
+      code: HTTP_STATUS.NOT_FOUND,
+      message: "Products not found",
+      logging: true,
+    });
+  };
+
+  orderByPriceAsc = async (req: Request, res: Response) => {
+    const products = await this.productModel.orderByPriceAsc();
+    if (products) return res.json(products);
+    throw new ServerError({
+      name: ErrorsName.NotFoundException,
+      code: HTTP_STATUS.NOT_FOUND,
+      message: "Products not ordered ascendent",
+      logging: true,
+    });
+  };
+
+  orderByPriceDesc = async (req: Request, res: Response) => {
+    const products = await this.productModel.orderByPriceDesc();
+    if (products) return res.json(products);
+    throw new ServerError({
+      name: ErrorsName.NotFoundException,
+      code: HTTP_STATUS.NOT_FOUND,
+      message: "Products not ordered descendent",
+      logging: true,
+    });
   };
 }
