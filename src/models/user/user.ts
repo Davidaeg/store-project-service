@@ -64,12 +64,37 @@ export class UsersModel {
     const user = await this.pool.request().query("SELECT * FROM [User]");
     return user.recordset as User[];
   }
-
   async findByEmail(email: string) {
-    const user = await this.pool
+    const userQuery = await this.pool
       .request()
       .query(`SELECT * FROM [User] WHERE username = '${email}'`);
-    return user.recordset[0] as User;
+
+    const userResult = userQuery.recordset[0];
+    if (!userResult) {
+      return null;
+    }
+
+    let user = { ...userResult };
+
+    const customerQuery = await this.pool
+      .request()
+      .query(`SELECT * FROM Customer WHERE personId = ${user.personId}`);
+    const customer = customerQuery.recordset[0];
+    if (customer) {
+      user.userType = "customer";
+      return user;
+    }
+
+    const employeeQuery = await this.pool
+      .request()
+      .query(`SELECT * FROM Employee WHERE personId = ${user.personId}`);
+    const employee = employeeQuery.recordset[0];
+    if (employee) {
+      user.userType = "employee";
+      return user;
+    }
+
+    return user;
   }
 
   async findByPersonId({ id }: { id: number }) {

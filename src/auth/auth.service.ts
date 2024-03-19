@@ -48,11 +48,14 @@ export class AuthService {
       throw new Error("Error en Contraseña");
     }
 
-    return {
-      id: user.userId,
-      username: user.username,
-      // firstLastName: user.person.firstLastName,
-      // routes: USERS_ROUTES[user.userType.description],
-    };
+    if (user.userType === "customer" || user.userType === "employee") {
+      return {
+        id: user.userId,
+        username: user.username,
+        userType: user.userType,
+      };
+    } else {
+      throw new Error("Tipo de usuario desconocido");
+    }
   }
 }
