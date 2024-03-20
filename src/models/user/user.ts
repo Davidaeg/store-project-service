@@ -3,6 +3,10 @@ import { CreateUserDto, User } from "./user.entity";
 import { Person } from "models/person/person.entity";
 import { Database } from "@DB/DataBase";
 
+enum UserType {
+  CUSTOMER = "customer",
+  EMPLOYEE = "employee",
+}
 export class UsersModel {
   private pool!: ConnectionPool;
   constructor() {
@@ -64,6 +68,7 @@ export class UsersModel {
     const user = await this.pool.request().query("SELECT * FROM [User]");
     return user.recordset as User[];
   }
+
   async findByEmail(email: string) {
     const userQuery = await this.pool
       .request()
@@ -81,7 +86,7 @@ export class UsersModel {
       .query(`SELECT * FROM Customer WHERE personId = ${user.personId}`);
     const customer = customerQuery.recordset[0];
     if (customer) {
-      user.userType = "customer";
+      user.userType = UserType.CUSTOMER;
       return user;
     }
 
@@ -90,7 +95,7 @@ export class UsersModel {
       .query(`SELECT * FROM Employee WHERE personId = ${user.personId}`);
     const employee = employeeQuery.recordset[0];
     if (employee) {
-      user.userType = "employee";
+      user.userType = UserType.EMPLOYEE;
       return user;
     }
 
