@@ -4,6 +4,11 @@ import { promisify } from "util";
 
 const scrypt = promisify(_scrypt);
 
+enum UserType {
+  CUSTOMER = "customer",
+  EMPLOYEE = "employee",
+}
+
 export class AuthService {
   constructor(private usersModel: UsersModel) {}
 
@@ -48,11 +53,14 @@ export class AuthService {
       throw new Error("Error en Contraseña");
     }
 
-    return {
-      id: user.userId,
-      username: user.username,
-      // firstLastName: user.person.firstLastName,
-      // routes: USERS_ROUTES[user.userType.description],
-    };
+    if (Object.values(UserType).includes(user.userType)) {
+      return {
+        id: user.userId,
+        username: user.username,
+        userType: user.userType as UserType,
+      };
+    } else {
+      throw new Error("Tipo de usuario desconocido");
+    }
   }
 }

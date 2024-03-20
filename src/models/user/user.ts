@@ -3,6 +3,10 @@ import { CreateUserDto, User } from "./user.entity";
 import { Person } from "models/person/person.entity";
 import { Database } from "@DB/DataBase";
 
+enum UserType {
+  CUSTOMER = "customer",
+  EMPLOYEE = "employee",
+}
 export class UsersModel {
   private pool!: ConnectionPool;
   constructor() {
@@ -66,10 +70,36 @@ export class UsersModel {
   }
 
   async findByEmail(email: string) {
-    const user = await this.pool
+    const userQuery = await this.pool
       .request()
       .query(`SELECT * FROM [User] WHERE username = '${email}'`);
-    return user.recordset[0] as User;
+
+    const userResult = userQuery.recordset[0];
+    if (!userResult) {
+      return null;
+    }
+
+    let user = { ...userResult };
+
+    const customerQuery = await this.pool
+      .request()
+      .query(`SELECT * FROM Customer WHERE personId = ${user.personId}`);
+    const customer = customerQuery.recordset[0];
+    if (customer) {
+      user.userType = UserType.CUSTOMER;
+      return user;
+    }
+
+    const employeeQuery = await this.pool
+      .request()
+      .query(`SELECT * FROM Employee WHERE personId = ${user.personId}`);
+    const employee = employeeQuery.recordset[0];
+    if (employee) {
+      user.userType = UserType.EMPLOYEE;
+      return user;
+    }
+
+    return user;
   }
 
   async findByPersonId({ id }: { id: number }) {
