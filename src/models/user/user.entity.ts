@@ -10,3 +10,8 @@ export interface CreateUserDto {
   username: string;
   password: string;
 }
+
+export enum UserType {
+  CUSTOMER = "customer",
+  EMPLOYEE = "employee",
+}

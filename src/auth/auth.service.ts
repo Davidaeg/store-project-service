@@ -1,13 +1,9 @@
+import { UserType } from "@models/user/user.entity";
 import { randomBytes, scrypt as _scrypt } from "crypto";
 import { UsersModel } from "models/user/user";
 import { promisify } from "util";
 
 const scrypt = promisify(_scrypt);
-
-enum UserType {
-  CUSTOMER = "customer",
-  EMPLOYEE = "employee",
-}
 
 export class AuthService {
   constructor(private usersModel: UsersModel) {}

@@ -1,12 +1,8 @@
 import { ConnectionPool } from "mssql";
-import { CreateUserDto, User } from "./user.entity";
+import { CreateUserDto, User, UserType } from "./user.entity";
 import { Person } from "models/person/person.entity";
 import { Database } from "@DB/DataBase";
 
-enum UserType {
-  CUSTOMER = "customer",
-  EMPLOYEE = "employee",
-}
 export class UsersModel {
   private pool!: ConnectionPool;
   constructor() {
