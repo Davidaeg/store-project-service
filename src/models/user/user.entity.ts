@@ -14,4 +14,13 @@ export interface CreateUserDto {
 export enum UserType {
   CUSTOMER = "customer",
   EMPLOYEE = "employee",
+  GUEST = "guest",
 }
+
+export type SignInResponseUser = {
+  id: number;
+  rootPath: string;
+  routes: string[];
+  username: string;
+  userType: UserType;
+};
