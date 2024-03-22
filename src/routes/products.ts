@@ -20,10 +20,7 @@ export const createProductRouter = ({
     "/",
     upload.single("imageFile"),
     productsController.create
-  ),
-    (error: any, req: any, res: any, next: any) => {
-      res.status(400).send({ error: error.message });
-    };
+  );
   productsRouter.delete("/:id", productsController.delete);
   productsRouter.patch("/:id", productsController.update);
 
