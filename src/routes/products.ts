@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { ProductController } from "../controllers/product.ts";
 import { ProductModel } from "models/product/product.ts";
-
+import { upload } from "@utils/imageUploader.ts";
+// import multer from "multer";
+// const upload = multer({ dest: "images/" });
 export const createProductRouter = ({
   productModel,
 }: {
@@ -14,7 +16,14 @@ export const createProductRouter = ({
   //CRUD
   productsRouter.get("/", productsController.getAll);
   productsRouter.get("/:id", productsController.getById);
-  productsRouter.post("/", productsController.create);
+  productsRouter.post(
+    "/",
+    upload.single("imageFile"),
+    productsController.create
+  ),
+    (error: any, req: any, res: any, next: any) => {
+      res.status(400).send({ error: error.message });
+    };
   productsRouter.delete("/:id", productsController.delete);
   productsRouter.patch("/:id", productsController.update);
 
@@ -22,9 +31,6 @@ export const createProductRouter = ({
   productsRouter.get("/search/:name", productsController.filterByName);
   productsRouter.get("/asc/price", productsController.orderByPriceAsc);
   productsRouter.get("/desc/price", productsController.orderByPriceDesc);
-
-  //Upload Image
-  // productsRouter.post("/uploadImage", productsController.uploadImageMiddleware);
 
   //returning end points
   return productsRouter;

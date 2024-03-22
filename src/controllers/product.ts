@@ -3,30 +3,7 @@ import { ProductModel } from "../models/product/product.ts";
 import { validatePartialProduct, validateProduct } from "../schemas/product.ts";
 import ServerError from "@errors/ServerError.ts";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
-
-const multer = require("multer");
-const path = require("path");
-
-// const fileStorage = multer.diskStorage({
-//   destination: "images",
-//   filename: (req: any, file: any, cb: any) => {
-//     cb(null, file.fieldname + "_" + Date.now()) +
-//       path.extname(file.originalname);
-//   },
-// });
-
-// const uploadImage = multer({
-//   storage: fileStorage,
-//   limits: {
-//     filesize: 1000000,
-//   },
-//   fileFilter(req: any, file: any, cb: any) {
-//     if (!file.originalname.match(/\.(png|jpg)$/)) {
-//       return cb(new Error("Please upload an Image file"));
-//     }
-//     cb(undefined, true);
-//   },
-// });
+import { CreateProduct } from "@models/product/product.entity.ts";
 
 export class ProductController {
   constructor(private productModel: ProductModel) {}
@@ -49,7 +26,11 @@ export class ProductController {
   };
 
   create = async (req: Request, res: Response) => {
-    const result = validateProduct(req.body);
+    const inputProduct: CreateProduct = { ...req.body };
+    //TODO
+    console.log({ inputProduct });
+
+    const result = validateProduct(inputProduct);
 
     if (!result.success) {
       throw new ServerError({
@@ -138,26 +119,4 @@ export class ProductController {
       logging: true,
     });
   };
-
-  // uploadImageMiddleware(req: Request, res: Response, next: any) {
-  //   // This middleware can be used before the handler to handle the image upload
-  //   uploadImage.single("image")(req, res, (err: any) => {
-  //     if (err instanceof multer.MulterError) {
-  //       return res.status(HTTP_STATUS.BAD_REQUEST).json({
-  //         error: err.message,
-  //       });
-  //     } else if (err) {
-  //       return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-  //         error: err.message,
-  //       });
-  //     }
-  //     next(); // Proceed to the next middleware or handler
-  //   });
-  // }
-
-  // // Handler for uploading image
-  // async uploadImageHandler(req: Request, res: Response) {
-  //   // Assuming multer middleware already saved the image to 'images' directory
-  //   res.json({ message: "Image uploaded successfully" });
-  // }
 }
