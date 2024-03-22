@@ -2,6 +2,9 @@ import { ConnectionPool } from "mssql";
 import { CreateUserDto, User, UserType } from "./user.entity";
 import { Person } from "models/person/person.entity";
 import { Database } from "@DB/DataBase";
+import { userRootPathMap, userRoutesMap } from "./userRoutes";
+import ServerError from "@errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
 
 export class UsersModel {
   private pool!: ConnectionPool;
@@ -66,36 +69,54 @@ export class UsersModel {
   }
 
   async findByEmail(email: string) {
+    const user = await this.pool
+      .request()
+      .query(`SELECT * FROM [User] WHERE username = '${email}'`);
+    return user.recordset[0] as User;
+  }
+
+  async findByEmailforLogin(email: string) {
     const userQuery = await this.pool
       .request()
       .query(`SELECT * FROM [User] WHERE username = '${email}'`);
 
-    const userResult = userQuery.recordset[0];
+    const userResult = userQuery.recordset[0] as User;
     if (!userResult) {
-      return null;
+      throw new ServerError({
+        name: ErrorsName.NotFoundException,
+        code: HTTP_STATUS.NOT_FOUND,
+        message: "User not found",
+        logging: true,
+      });
     }
-
-    let user = { ...userResult };
 
     const customerQuery = await this.pool
       .request()
-      .query(`SELECT * FROM Customer WHERE personId = ${user.personId}`);
+      .query(`SELECT * FROM Customer WHERE personId = ${userResult.personId}`);
     const customer = customerQuery.recordset[0];
     if (customer) {
-      user.userType = UserType.CUSTOMER;
-      return user;
+      return {
+        ...userResult,
+        id: userResult.userId,
+        userType: UserType.CUSTOMER,
+        rootPath: userRootPathMap[UserType.CUSTOMER],
+        routes: userRoutesMap[UserType.CUSTOMER],
+      };
     }
 
     const employeeQuery = await this.pool
       .request()
-      .query(`SELECT * FROM Employee WHERE personId = ${user.personId}`);
+      .query(`SELECT * FROM Employee WHERE personId = ${userResult.personId}`);
     const employee = employeeQuery.recordset[0];
     if (employee) {
-      user.userType = UserType.EMPLOYEE;
-      return user;
+      return {
+        ...userResult,
+        id: userResult.userId,
+        userType: UserType.EMPLOYEE,
+        rootPath: userRootPathMap[UserType.EMPLOYEE],
+        routes: userRoutesMap[UserType.EMPLOYEE],
+      };
     }
-
-    return user;
   }
 
   async findByPersonId({ id }: { id: number }) {
