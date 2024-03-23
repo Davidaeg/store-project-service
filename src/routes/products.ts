@@ -15,15 +15,11 @@ export const createProductRouter = ({
 
   //CRUD
   productsRouter.get("/", productsController.getAll);
+
   productsRouter.get("/:id", productsController.getById);
-  productsRouter.post(
-    "/",
-    upload.single("imageFile"),
-    productsController.create
-  ),
-    (error: any, req: any, res: any, next: any) => {
-      res.status(400).send({ error: error.message });
-    };
+  productsRouter.post("/", productsController.create);
+  productsRouter.post("/upload", upload.single("imageFile"));
+
   productsRouter.delete("/:id", productsController.delete);
   productsRouter.patch("/:id", productsController.update);
 
