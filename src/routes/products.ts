@@ -2,8 +2,7 @@ import { Router } from "express";
 import { ProductController } from "../controllers/product.ts";
 import { ProductModel } from "models/product/product.ts";
 import { upload } from "@utils/imageUploader.ts";
-// import multer from "multer";
-// const upload = multer({ dest: "images/" });
+
 export const createProductRouter = ({
   productModel,
 }: {
@@ -15,7 +14,6 @@ export const createProductRouter = ({
 
   //CRUD
   productsRouter.get("/", productsController.getAll);
-
   productsRouter.get("/:id", productsController.getById);
   productsRouter.post("/", productsController.create);
   productsRouter.post("/upload", upload.single("file"), (_req, res) => {
