@@ -27,8 +27,6 @@ export class ProductController {
 
   create = async (req: Request, res: Response) => {
     const inputProduct: CreateProduct = { ...req.body };
-    //TODO: price and stock should be validated ad numbers
-    console.log({ inputProduct });
 
     const result = validateProduct(inputProduct);
 

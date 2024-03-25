@@ -18,7 +18,9 @@ export const createProductRouter = ({
 
   productsRouter.get("/:id", productsController.getById);
   productsRouter.post("/", productsController.create);
-  productsRouter.post("/upload", upload.single("imageFile"));
+  productsRouter.post("/upload", upload.single("file"), (_req, res) => {
+    res.status(200).send("success");
+  });
 
   productsRouter.delete("/:id", productsController.delete);
   productsRouter.patch("/:id", productsController.update);
