@@ -3,6 +3,7 @@ import { ProductModel } from "../models/product/product.ts";
 import { validatePartialProduct, validateProduct } from "../schemas/product.ts";
 import ServerError from "@errors/ServerError.ts";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
+import { CreateProduct } from "@models/product/product.entity.ts";
 
 export class ProductController {
   constructor(private productModel: ProductModel) {}
@@ -25,7 +26,9 @@ export class ProductController {
   };
 
   create = async (req: Request, res: Response) => {
-    const result = validateProduct(req.body);
+    const inputProduct: CreateProduct = { ...req.body };
+
+    const result = validateProduct(inputProduct);
 
     if (!result.success) {
       throw new ServerError({
