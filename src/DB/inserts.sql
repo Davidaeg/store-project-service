@@ -38,5 +38,9 @@ VALUES ('Red');
 INSERT INTO ProductColor (productId, colorId)
 VALUES (1, 1);
 
--- Update OrderDetail 07/02/2022
+-- Update OrderDetail 07/02/2024
 UPDATE OrderDetail set quantity = 1 where orderDetailId = 1;
+
+-- Update Products Images 26/03/2024
+UPDATE Product
+set [image] = 'https://res.cloudinary.com/dzxcpomxo/image/upload/v1711474718/products/mlp4au5qtvvht1ubxz6x.webp'
