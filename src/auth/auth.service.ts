@@ -1,3 +1,4 @@
+import { SignInResponseUser, UserType } from "@models/user/user.entity";
 import { randomBytes, scrypt as _scrypt } from "crypto";
 import { UsersModel } from "models/user/user";
 import { promisify } from "util";
@@ -35,7 +36,7 @@ export class AuthService {
   }
 
   async signin(email: string, password: string) {
-    const user = await this.usersModel.findByEmail(email);
+    const user = await this.usersModel.findByEmailforLogin(email);
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
@@ -48,11 +49,10 @@ export class AuthService {
       throw new Error("Error en Contraseña");
     }
 
-    return {
-      id: user.userId,
-      username: user.username,
-      // firstLastName: user.person.firstLastName,
-      // routes: USERS_ROUTES[user.userType.description],
-    };
+    if (Object.values(UserType).includes(user.userType)) {
+      return user as SignInResponseUser;
+    } else {
+      throw new Error("Tipo de usuario desconocido");
+    }
   }
 }
