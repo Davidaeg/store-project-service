@@ -6,7 +6,6 @@ export interface User {
 }
 
 export interface CreateUserDto {
-  // personId: number;
   username: string;
   password: string;
 }
