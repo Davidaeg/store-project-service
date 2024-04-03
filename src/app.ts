@@ -63,10 +63,10 @@ export class App {
   }
 
   public listen() {
-    const PORT = process.env.PORT ?? 1234;
+    const PORT = process.env.PORT ?? 8080;
 
     this.app.listen(PORT, () => {
-      console.log(`server listening on port http://localhost:${PORT}`);
+      console.log(`server listening on port ${PORT}`);
     });
   }
 }

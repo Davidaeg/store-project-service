@@ -18,7 +18,6 @@ export const createUserRouter = ({
   userRouter.get("/:id", usersController.getById);
 
   userRouter.delete("/:id", usersController.delete);
-  //   productsRouter.patch("/:id", usersController.update);
   userRouter.post("/signup", usersController.create);
   userRouter.post("/signin", usersController.signin);
 
