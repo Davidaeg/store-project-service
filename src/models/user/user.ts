@@ -3,8 +3,8 @@ import { CreateUserDto, User, UserType } from "./user.entity";
 import { Person } from "models/person/person.entity";
 import { Database } from "@DB/DataBase";
 import { userRootPathMap, userRoutesMap } from "./userRoutes";
-import ServerError from "@errors/ServerError";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
+import ServerError from "../../errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "../../errors/error.enum";
 
 export class UsersModel {
   private pool!: ConnectionPool;

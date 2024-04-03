@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
-import { UsersModel } from "../models/user/user.ts";
-import { AuthService } from "../auth/auth.service.ts";
-import { validateUser } from "../schemas/user.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
+import { UsersModel } from "../models/user/user";
+import { AuthService } from "../auth/auth.service";
+import { validateUser } from "../schemas/user";
+import ServerError from "../errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "../errors/error.enum";
 
 export class UserController {
   constructor(

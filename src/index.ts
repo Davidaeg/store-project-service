@@ -1,8 +1,8 @@
-import { App } from "./app.ts";
-import { ProductModel } from "./models/product/product.ts";
-import { UsersModel } from "./models/user/user.ts";
-import { PersonModel } from "./models/person/person.ts";
-import { ColorModel } from "./models/color/color.ts";
+import { App } from "./app";
+import { ProductModel } from "./models/product/product";
+import { UsersModel } from "./models/user/user";
+import { PersonModel } from "./models/person/person";
+import { ColorModel } from "./models/color/color";
 
 async function startApp() {
   const productModel = new ProductModel();

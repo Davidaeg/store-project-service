@@ -1,9 +1,9 @@
 import sql, { ConnectionPool } from "mssql";
-import { CreatePersonDto, Person } from "./person.entity.ts";
-import { Database } from "@DB/DataBase.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
-import { UserType } from "@models/user/user.entity.ts";
+import { CreatePersonDto, Person } from "./person.entity";
+import { Database } from "@DB/DataBase";
+import ServerError from "../../errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "../../errors/error.enum";
+import { UserType } from "@models/user/user.entity";
 
 export class PersonModel {
   private pool!: ConnectionPool;

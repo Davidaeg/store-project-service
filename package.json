@@ -1,12 +1,16 @@
 {
   "name": "store-service",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "REST API for store service",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
-    "start": "ts-node -r tsconfig-paths/register build/index.ts",
-    "tsc": "tsc",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "build": "npm i",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -24,6 +28,7 @@
     "@types/luxon": "^3.4.2",
     "@types/mssql": "^9.1.4",
     "@types/multer": "^1.4.11",
+    "ts-node": "^10.9.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
     "express": "4.18.2",

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { PersonController } from "../controllers/person.ts";
-import { PersonModel } from "models/person/person.ts";
-import { AuthService } from "auth/auth.service.ts";
+import { PersonController } from "../controllers/person";
+import { PersonModel } from "models/person/person";
+import { AuthService } from "auth/auth.service";
 
 export const createPersonRouter = ({
   personModel,
