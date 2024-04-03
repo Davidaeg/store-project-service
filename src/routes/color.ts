@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { ColorController } from "../controllers/color.ts";
-import { ColorModel } from "models/color/color.ts";
-import { AuthService } from "auth/auth.service.ts";
+import { ColorController } from "../controllers/color";
+import { ColorModel } from "models/color/color";
+import { AuthService } from "auth/auth.service";
 
 export const createColorRouter = ({
   colorModel,
   authService,
 }: {
-    colorModel: ColorModel;
-    authService: AuthService;
+  colorModel: ColorModel;
+  authService: AuthService;
 }) => {
   const colorsRouter = Router();
 

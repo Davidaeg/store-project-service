@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { ProductController } from "../controllers/product.ts";
-import { ProductModel } from "models/product/product.ts";
-import { upload } from "@utils/imageUploader.ts";
+import { ProductController } from "../controllers/product";
+import { ProductModel } from "models/product/product";
+import { upload } from "@utils/imageUploader";
 
 export const createProductRouter = ({
   productModel,

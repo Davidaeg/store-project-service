@@ -1,5 +1,5 @@
 import { AuthService } from "auth/auth.service";
-import { UserController } from "../controllers/user.ts";
+import { UserController } from "../controllers/user";
 import { Router } from "express";
 import { UsersModel } from "../models/user/user";
 

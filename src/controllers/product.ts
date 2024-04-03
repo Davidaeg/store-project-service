@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { ProductModel } from "../models/product/product.ts";
-import { validatePartialProduct, validateProduct } from "../schemas/product.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
-import { CreateProduct } from "@models/product/product.entity.ts";
+import { ProductModel } from "../models/product/product";
+import { validatePartialProduct, validateProduct } from "../schemas/product";
+import ServerError from "@errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
+import { CreateProduct } from "@models/product/product.entity";
 
 export class ProductController {
   constructor(private productModel: ProductModel) {}

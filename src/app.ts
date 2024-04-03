@@ -1,16 +1,16 @@
 import express, { json } from "express";
 import "express-async-errors";
-import { createProductRouter } from "./routes/products.ts";
-import { createPersonRouter } from "./routes/person.ts";
-import { createColorRouter } from "./routes/color.ts";
-import { corsMiddleware } from "./middlewares/cors.ts";
-import { ProductModel } from "./models/product/product.ts";
-import { PersonModel } from "./models/person/person.ts";
-import { UsersModel } from "./models/user/user.ts";
-import { ColorModel } from "./models/color/color.ts";
-import { AuthService } from "./auth/auth.service.ts";
-import { createUserRouter } from "./routes/user.ts";
-import { errorHandler } from "@middlewares/errors.ts";
+import { createProductRouter } from "./routes/products";
+import { createPersonRouter } from "./routes/person";
+import { createColorRouter } from "./routes/color";
+import { corsMiddleware } from "./middlewares/cors";
+import { ProductModel } from "./models/product/product";
+import { PersonModel } from "./models/person/person";
+import { UsersModel } from "./models/user/user";
+import { ColorModel } from "./models/color/color";
+import { AuthService } from "./auth/auth.service";
+import { createUserRouter } from "./routes/user";
+import { errorHandler } from "@middlewares/errors";
 import "dotenv/config";
 
 export class App {
