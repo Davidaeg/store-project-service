@@ -4,6 +4,7 @@ const ACCEPTED_ORIGINS = [
   "http://localhost:5173",
   "http://localhost:3000",
   "http://localhost:5174",
+  "https://store-project-service.onrender.com",
 ];
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) =>
