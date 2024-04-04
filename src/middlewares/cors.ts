@@ -5,7 +5,7 @@ const ACCEPTED_ORIGINS = [
   "http://localhost:3000",
   "http://localhost:5174",
   "https://store-project-client-5h4c3on4m-davidaegs-projects.vercel.app",
-  "https://store-project-client.vercel.app/",
+  "https://store-project-client.vercel.app",
 ];
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) =>
