@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { PersonModel } from "../models/person/person.ts";
-import { validatePartialPerson, validatePerson } from "../schemas/person.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
-import { AuthService } from "@auth/auth.service.ts";
+import { PersonModel } from "../models/person/person";
+import { validatePartialPerson, validatePerson } from "../schemas/person";
+import ServerError from "@errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
+import { AuthService } from "@auth/auth.service";
 
 export class PersonController {
   constructor(

@@ -1,8 +1,9 @@
 import sql, { ConnectionPool } from "mssql";
-import { CreatePersonDto, Person } from "./person.entity.ts";
-import { Database } from "@DB/DataBase.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
+import { CreatePersonDto, Person } from "./person.entity";
+import { Database } from "@DB/DataBase";
+import ServerError from "@errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
+import { UserType } from "@models/user/user.entity";
 
 export class PersonModel {
   private pool!: ConnectionPool;
@@ -46,7 +47,7 @@ export class PersonModel {
 
       const newPerson = createPerson.recordset[0];
 
-      if (person.userType === "customer") {
+      if (person.userType === UserType.CUSTOMER) {
         await this.pool
           .request()
           .input("personId", newPerson.personId)
@@ -54,7 +55,7 @@ export class PersonModel {
             `INSERT INTO Customer (personId)
                     VALUES (@personId)`
           );
-      } else if (person.userType === "employee") {
+      } else if (person.userType === UserType.EMPLOYEE) {
         await this.pool
           .request()
           .input("personId", newPerson.personId)

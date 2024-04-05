@@ -1,8 +1,8 @@
 import sql, { ConnectionPool } from "mssql";
-import { CreateProduct, Product } from "./product.entity.ts";
-import { Database } from "@DB/DataBase.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
+import { CreateProduct, Product } from "./product.entity";
+import { Database } from "@DB/DataBase";
+import ServerError from "@errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
 
 export class ProductModel {
   private pool!: ConnectionPool;
