@@ -36,10 +36,10 @@ CREATE TABLE Employee (
 
 CREATE TABLE [Order] (
     orderId INT PRIMARY KEY IDENTITY(1,1),
-    employeeId INT,
+    customerId INT,
     purchaseDate DATETIME,
     status VARCHAR(13),
-    FOREIGN KEY (employeeId) REFERENCES Employee(employeeId)
+    FOREIGN KEY (customerId) REFERENCES Customer(customerId)
 );
 
 CREATE TABLE Product (
