@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { ProductController } from "../controllers/product.ts";
-import { ProductModel } from "models/product/product.ts";
+import { ProductController } from "../controllers/product";
+import { ProductModel } from "models/product/product";
 
 export const createProductRouter = ({
   productModel,
@@ -11,12 +11,18 @@ export const createProductRouter = ({
 
   const productsController = new ProductController(productModel);
 
+  //CRUD
   productsRouter.get("/", productsController.getAll);
-  productsRouter.post("/", productsController.create);
-
   productsRouter.get("/:id", productsController.getById);
+  productsRouter.post("/", productsController.create);
   productsRouter.delete("/:id", productsController.delete);
   productsRouter.patch("/:id", productsController.update);
 
+  //OTHER REQUESTS
+  productsRouter.get("/search/:name", productsController.filterByName);
+  productsRouter.get("/asc/price", productsController.orderByPriceAsc);
+  productsRouter.get("/desc/price", productsController.orderByPriceDesc);
+
+  //returning end points
   return productsRouter;
 };

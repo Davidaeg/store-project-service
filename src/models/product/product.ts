@@ -1,8 +1,8 @@
 import sql, { ConnectionPool } from "mssql";
-import { CreateProduct, Product } from "./product.entity.ts";
-import { Database } from "@DB/DataBase.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
+import { CreateProduct, Product } from "./product.entity";
+import { Database } from "@DB/DataBase";
+import ServerError from "@errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
 
 export class ProductModel {
   private pool!: ConnectionPool;
@@ -87,5 +87,28 @@ export class ProductModel {
       });
     }
     return input;
+  }
+
+  async filterByName({ name }: { name: string }) {
+    const products = await this.pool
+      .request()
+      .input("input_parameter", sql.VarChar, "%" + name + "%")
+      .query("SELECT * FROM Product p WHERE p.name like @input_parameter");
+    return products.recordset;
+  }
+
+  async orderByPriceAsc() {
+    const products = await this.pool
+      .request()
+      .query("SELECT * FROM Product p ORDER BY PRICE ASC;");
+    console.log(products);
+    return products.recordset;
+  }
+
+  async orderByPriceDesc() {
+    const products = await this.pool
+      .request()
+      .query("SELECT * FROM Product p ORDER BY PRICE DESC;");
+    return products.recordset;
   }
 }

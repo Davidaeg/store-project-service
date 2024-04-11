@@ -1,15 +1,13 @@
 import { Request, Response } from "express";
-import { ProductModel } from "../models/product/product.ts";
-import { validatePartialProduct, validateProduct } from "../schemas/product.ts";
-import ServerError from "@errors/ServerError.ts";
-import { ErrorsName, HTTP_STATUS } from "@errors/error.enum.ts";
+import { ProductModel } from "../models/product/product";
+import { validatePartialProduct, validateProduct } from "../schemas/product";
+import ServerError from "@errors/ServerError";
+import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
+import { CreateProduct } from "@models/product/product.entity";
 
 export class ProductController {
-  private productModel: ProductModel;
+  constructor(private productModel: ProductModel) {}
 
-  constructor(productModel: ProductModel) {
-    this.productModel = productModel;
-  }
   getAll = async (_req: Request, res: Response) => {
     const products = await this.productModel.getAll();
     res.json(products);
@@ -28,7 +26,9 @@ export class ProductController {
   };
 
   create = async (req: Request, res: Response) => {
-    const result = validateProduct(req.body);
+    const inputProduct: CreateProduct = { ...req.body };
+
+    const result = validateProduct(inputProduct);
 
     if (!result.success) {
       throw new ServerError({
@@ -80,5 +80,41 @@ export class ProductController {
       productId: Number(id),
     });
     return res.json(updatedProduct);
+  };
+
+  filterByName = async (req: Request, res: Response) => {
+    const { name } = req.params;
+    const products = await this.productModel.filterByName({
+      name: String(name),
+    });
+    if (products) return res.json(products);
+    throw new ServerError({
+      name: ErrorsName.NotFoundException,
+      code: HTTP_STATUS.NOT_FOUND,
+      message: "Products not found",
+      logging: true,
+    });
+  };
+
+  orderByPriceAsc = async (req: Request, res: Response) => {
+    const products = await this.productModel.orderByPriceAsc();
+    if (products) return res.json(products);
+    throw new ServerError({
+      name: ErrorsName.NotFoundException,
+      code: HTTP_STATUS.NOT_FOUND,
+      message: "Products not ordered ascendent",
+      logging: true,
+    });
+  };
+
+  orderByPriceDesc = async (req: Request, res: Response) => {
+    const products = await this.productModel.orderByPriceDesc();
+    if (products) return res.json(products);
+    throw new ServerError({
+      name: ErrorsName.NotFoundException,
+      code: HTTP_STATUS.NOT_FOUND,
+      message: "Products not ordered descendent",
+      logging: true,
+    });
   };
 }

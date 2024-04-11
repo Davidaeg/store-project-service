@@ -7,7 +7,7 @@ CREATE TABLE Person (
     name VARCHAR(50),
     firstLastName VARCHAR(50),
     secondLastName VARCHAR(50),
-    birthday DATETIME,
+    birthday DATE,
     email VARCHAR(100) UNIQUE,
     phoneNumber VARCHAR(20),
     address VARCHAR(255)

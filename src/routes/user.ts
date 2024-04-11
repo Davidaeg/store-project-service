@@ -1,5 +1,5 @@
 import { AuthService } from "auth/auth.service";
-import { UserController } from "../controllers/user.ts";
+import { UserController } from "../controllers/user";
 import { Router } from "express";
 import { UsersModel } from "../models/user/user";
 
@@ -18,9 +18,8 @@ export const createUserRouter = ({
   userRouter.get("/:id", usersController.getById);
 
   userRouter.delete("/:id", usersController.delete);
-  //   productsRouter.patch("/:id", usersController.update);
   userRouter.post("/signup", usersController.create);
-  userRouter.post("/signin", usersController.sigin);
+  userRouter.post("/signin", usersController.signin);
 
   return userRouter;
 };
