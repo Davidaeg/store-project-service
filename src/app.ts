@@ -3,11 +3,13 @@ import "express-async-errors";
 import { createProductRouter } from "./routes/products";
 import { createPersonRouter } from "./routes/person";
 import { createColorRouter } from "./routes/color";
+import { createOrderRouter } from "./routes/order";
 import { corsMiddleware } from "./middlewares/cors";
 import { ProductModel } from "./models/product/product";
 import { PersonModel } from "./models/person/person";
 import { UsersModel } from "./models/user/user";
 import { ColorModel } from "./models/color/color";
+import { OrdersModel } from "./models/order/order";
 import { AuthService } from "./auth/auth.service";
 import { createUserRouter } from "./routes/user";
 import { errorHandler } from "@middlewares/errors";
@@ -20,7 +22,8 @@ export class App {
     private productModel: ProductModel,
     private userMode: UsersModel,
     private personModel: PersonModel,
-    private colorModel: ColorModel
+    private colorModel: ColorModel,
+    private orderModel: OrdersModel
   ) {
     this.app = express();
     this.setupMiddleware();
@@ -57,6 +60,13 @@ export class App {
       "/color",
       createColorRouter({
         colorModel: this.colorModel,
+        authService: new AuthService(this.userMode),
+      })
+    );
+    this.app.use(
+      "/order",
+      createOrderRouter({
+        orderModel: this.orderModel,
         authService: new AuthService(this.userMode),
       })
     );
