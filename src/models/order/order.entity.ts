@@ -11,7 +11,7 @@ export interface CreateOrderDetailsDto {
 }
 
 export interface CreateOrderDto {
-  customerId: number;
+  userId: number;
   purchaseDate: Date;
   status: string;
   products: CreateOrderDetailsDto[];
