@@ -29,17 +29,31 @@ export class OrdersModel {
 
     async create(order: CreateOrderDto){
       try {
+        //Check if there is a Customer with a specific UserID
+        const checkCustomer = await this.pool
+        .request()
+        .input("userId", sql.Int, order.userId)
+        .query(
+          `SELECT customerId 
+            FROM Customer 
+            WHERE personID = (SELECT personID FROM [User] WHERE userId = @userId)`
+        )
+        if (checkCustomer.recordset.length === 0){
+          return undefined;
+        }
+
+        //Check if there is enough stock to create the order
         for (const product of order.products){
           const isValidStock = await this.validateStock(product);
-      
           if (!isValidStock) {
-            return undefined;       
+            return undefined;    
           }
         }
 
+        //Create the order in the Order Table
         const createOrder = await this.pool
           .request()
-          .input("customerId", sql.Int, order.customerId)
+          .input("customerId", sql.Int, checkCustomer.recordset[0].customerId)
           .input("purchaseDate", sql.Date, order.purchaseDate)
           .input("status", sql.VarChar, order.status)
           .query(
@@ -49,7 +63,8 @@ export class OrdersModel {
           );
 
           const newOrder = createOrder.recordset[0];
-
+          
+          // For each product update the stock and then create the OrderDetail
           for (const product of order.products){
             await this.pool
               .request()

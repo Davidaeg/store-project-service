@@ -6,7 +6,7 @@ export const CreateOrderDetailSchema = z.object({
 });
 
 export const CreateOrderSchema = z.object({
-    customerId: z.number().min(1, { message: "CustomerID is required" }),
+    userId: z.number().min(1, { message: "UserId is required" }),
     purchaseDate: z
     .string()
     .transform((value) => new Date(value))
