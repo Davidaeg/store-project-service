@@ -17,6 +17,7 @@ export const createOrderRouter = ({
     ordersRouter.get("/", ordersController.getAll);
     ordersRouter.get("/:id", ordersController.getById);
     ordersRouter.post("/", ordersController.create);
+    ordersRouter.patch("/:id", ordersController.update);
   
     //OTHER REQUESTS
     ordersRouter.get("/search/:customerId", ordersController.findByCustomerId);
