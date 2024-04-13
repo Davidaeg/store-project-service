@@ -118,6 +118,29 @@ export class OrdersModel {
           .request()
           .query(`SELECT * FROM [Order] WHERE customerId = ${customerId}`);
         return order.recordset[0] as Order;
+    }
+
+    async update(input: Partial<Order>){
+      try {
+        const updatedOrder = await this.pool
+          .request()
+          .input("Id", sql.Int, input.orderId)
+          .input("Status", sql.VarChar, input.status)
+          .query(
+            `UPDATE [Order] SET "status" = @Status WHERE orderId = @Id`
+          );
+
+          console.log({ updatedOrder });
+      } catch (error) {
+        throw new ServerError({
+          name: ErrorsName.InternalServerError,
+          code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
+          message: "Error updating order",
+          logging: true,
+          context: { error },
+        });
       }
+      return input;
+    }
 
 }
