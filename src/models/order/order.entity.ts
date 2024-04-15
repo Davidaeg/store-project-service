@@ -1,11 +1,14 @@
 export interface Order {
   orderId: number;
-  customerId: number;
+  customerName: string;
   purchaseDate: Date;
   status: string;
 }
 
 export interface CreateOrderDetailsDto {
+  orderId?: number;
+  productName?: string; 
+  productPrice?: number; 
   productId: number;
   quantity: number;
 }
@@ -16,3 +19,5 @@ export interface CreateOrderDto {
   status: string;
   products: CreateOrderDetailsDto[];
 }
+
+

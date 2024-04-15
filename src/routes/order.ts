@@ -15,11 +15,12 @@ export const createOrderRouter = ({
   
     //CRUD
     ordersRouter.get("/", ordersController.getAll);
+    ordersRouter.get("/details/:orderId", ordersController.getOrderDetailsByOrderId);
     ordersRouter.get("/:id", ordersController.getById);
     ordersRouter.post("/", ordersController.create);
-    ordersRouter.patch("/:id", ordersController.update);
+    ordersRouter.patch("/updateOrderStatus/:orderId", ordersController.updateStatus);
   
-    //OTHER REQUESTS
+    //OTHER REQUESTSs
     ordersRouter.get("/search/:customerId", ordersController.findByCustomerId);
 
     //returning end points
