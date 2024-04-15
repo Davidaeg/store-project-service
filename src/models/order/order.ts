@@ -1,5 +1,5 @@
 import sql, { ConnectionPool } from "mssql";
-import { CreateOrderDto, CreateOrderDetailsDto, Order} from "./order.entity";
+import { CreateOrderDto, CreateOrderDetailsDto, Order, Category} from "./order.entity";
 import { Database } from "@DB/DataBase";
 import ServerError from "@errors/ServerError";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
@@ -42,6 +42,8 @@ export class OrdersModel {
           return undefined;
         }
 
+        const customerId = checkCustomer.recordset[0].customerId;
+
         //Check if there is enough stock to create the order
         for (const product of order.products){
           const isValidStock = await this.validateStock(product);
@@ -53,7 +55,7 @@ export class OrdersModel {
         //Create the order in the Order Table
         const createOrder = await this.pool
           .request()
-          .input("customerId", sql.Int, checkCustomer.recordset[0].customerId)
+          .input("customerId", sql.Int, customerId)
           .input("purchaseDate", sql.Date, order.purchaseDate)
           .input("status", sql.VarChar, order.status)
           .query(
@@ -65,7 +67,15 @@ export class OrdersModel {
           const newOrder = createOrder.recordset[0];
           
           // For each product update the stock and then create the OrderDetail
+          let orderTotalAmount = 0;
           for (const product of order.products){
+            const productAmount = await this.pool
+              .request()
+              .input("productId", sql.Int, product.productId)
+              .query(`SELECT priceWithIva FROM Product WHERE productId = @productId`);
+
+            orderTotalAmount += productAmount.recordset[0].priceWithIva * product.quantity;
+
             await this.pool
               .request()
               .input("productId", sql.Int, product.productId)
@@ -83,6 +93,8 @@ export class OrdersModel {
                 `INSERT INTO OrderDetail (orderId, productId, quantity)
                     VALUES (@orderId, @productId, @quantity)`);
           }
+
+          await this.updateCustomerCategory(customerId, orderTotalAmount);
           
           return newOrder;
 
@@ -141,6 +153,39 @@ export class OrdersModel {
         });
       }
       return input;
+    }
+
+    async updateCustomerCategory(customerId: number, orderTotalAmount: number){
+      const customer = await this.pool
+      .request()
+      .input("customerId", sql.Int, customerId)
+      .query(`SELECT category FROM Customer WHERE customerId = @customerId`);
+      const currentCategory = customer.recordset[0].category;
+
+      let newCategory;
+      switch (true) {
+        case orderTotalAmount >= 100000:
+          newCategory = Category.Category1;
+          break;
+        case orderTotalAmount >= 70000:
+          newCategory = Category.Category2;
+          break;
+        case orderTotalAmount >= 50000:
+          newCategory = Category.Category3;
+          break;
+        default:
+          newCategory = Category.Category0;
+          break;
+      }
+
+      if (newCategory != currentCategory){
+        await this.pool
+          .request()
+          .input("customerId", sql.Int, customerId)
+          .input("category", sql.VarChar, newCategory)
+          .query(`UPDATE Customer SET category = @category WHERE customerId = @customerId`);
+      }
+
     }
 
 }
