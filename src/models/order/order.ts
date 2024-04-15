@@ -4,6 +4,7 @@ import { Database } from "@DB/DataBase";
 import ServerError from "@errors/ServerError";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
 
+
 export class OrdersModel {
     private pool!: ConnectionPool;
     constructor() {
@@ -23,13 +24,51 @@ export class OrdersModel {
     }
 
     async getAll() {
-        const order = await this.pool.request().query("SELECT * FROM [Order]");
-        return order.recordset as Order[];
-    }
+      const query = `
+          SELECT 
+              o.orderId, 
+              CONCAT(p.name, ' ', p.firstLastName, ' ', p.secondLastName) AS customerName, 
+              o.purchaseDate, 
+              o.status
+          FROM 
+              [Order] o
+          JOIN 
+              Customer c ON o.customerId = c.customerId
+          JOIN 
+              Person p ON c.personId = p.personId;
+      `;
+      const result = await this.pool.request().query(query);
+      return result.recordset as Order[];
+  }
+    
+  async getOrderDetailsByOrderId(orderId: number) {
+    const query = `
+      SELECT 
+          od.orderId, 
+          p.name AS productName, 
+          p.price AS productPrice, 
+          od.quantity
+      FROM 
+          OrderDetail od
+      JOIN 
+          Product p ON od.productId = p.productId
+      WHERE
+          od.orderId = @orderId; -- Filtrar por el ID de pedido
+    `;
+  
+    const result = await this.pool
+      .request()
+      .input('orderId', orderId)
+      .query(query);
+  
+    return result.recordset as CreateOrderDetailsDto[];
+  }
+  
+
 
     async create(order: CreateOrderDto){
       try {
-        //Check if there is a Customer with a specific UserID
+    
         const checkCustomer = await this.pool
         .request()
         .input("userId", sql.Int, order.userId)
@@ -44,7 +83,7 @@ export class OrdersModel {
 
         const customerId = checkCustomer.recordset[0].customerId;
 
-        //Check if there is enough stock to create the order
+     
         for (const product of order.products){
           const isValidStock = await this.validateStock(product);
           if (!isValidStock) {
@@ -52,7 +91,7 @@ export class OrdersModel {
           }
         }
 
-        //Create the order in the Order Table
+
         const createOrder = await this.pool
           .request()
           .input("customerId", sql.Int, customerId)
@@ -66,7 +105,7 @@ export class OrdersModel {
 
           const newOrder = createOrder.recordset[0];
           
-          // For each product update the stock and then create the OrderDetail
+        
           let orderTotalAmount = 0;
           for (const product of order.products){
             const productAmount = await this.pool
@@ -132,25 +171,20 @@ export class OrdersModel {
         return order.recordset[0] as Order;
     }
 
-    async update(input: Partial<Order>){
+    async updateStatus(input: Partial<Order>) {
       try {
-        const updatedOrder = await this.pool
-          .request()
-          .input("Id", sql.Int, input.orderId)
-          .input("Status", sql.VarChar, input.status)
-          .query(
-            `UPDATE [Order] SET "status" = @Status WHERE orderId = @Id`
-          );
-
-          console.log({ updatedOrder });
+          console.log("Updating order status. Input:", input);
+  
+          const updatedOrder = await this.pool
+              .request()
+              .input("orderId", sql.Int, input.orderId)
+              .input("Status", sql.VarChar, input.status)
+              .query(
+                  `UPDATE [Order] SET "status" = @Status WHERE orderId = @orderId`
+              );
+          return updatedOrder;
       } catch (error) {
-        throw new ServerError({
-          name: ErrorsName.InternalServerError,
-          code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-          message: "Error updating order",
-          logging: true,
-          context: { error },
-        });
+          console.error("Error updating State:", error);
       }
       return input;
     }
