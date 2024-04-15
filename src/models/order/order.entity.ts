@@ -16,3 +16,10 @@ export interface CreateOrderDto {
   status: string;
   products: CreateOrderDetailsDto[];
 }
+
+export enum Category{
+  Category0 = 'STD',
+  Category1 = 'Cat1',
+  Category2 = 'Cat2',
+  Category3 = 'Cat3',
+}
