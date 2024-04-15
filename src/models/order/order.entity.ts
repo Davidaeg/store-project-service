@@ -4,6 +4,12 @@ export interface Order {
   purchaseDate: Date;
   status: string;
 }
+export enum Category{
+  Category0 = 'STD',
+  Category1 = 'Cat1',
+  Category2 = 'Cat2',
+  Category3 = 'Cat3',
+}
 
 export interface CreateOrderDetailsDto {
   orderId?: number;
@@ -19,5 +25,4 @@ export interface CreateOrderDto {
   status: string;
   products: CreateOrderDetailsDto[];
 }
-
 
