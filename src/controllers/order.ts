@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { OrdersModel } from "../models/order/order";
-import { validateOrder } from "../schemas/order";
+import { validateOrder, validatePartialOrder } from "../schemas/order";
 import ServerError from "@errors/ServerError";
 import { ErrorsName, HTTP_STATUS } from "@errors/error.enum";
 
@@ -24,6 +24,14 @@ export class OrderController{
         res.json(orders);
     };
 
+    getOrderDetailsByOrderId = async (req: Request, res: Response) => {
+      const orderId = req.params.orderId;
+      const details = await this.orderModel.getOrderDetailsByOrderId(Number(orderId));
+      res.json(details);
+    };
+    
+    
+    
     create = async (req: Request, res: Response) => {
         const result = validateOrder(req.body);
 
@@ -46,4 +54,25 @@ export class OrderController{
         const orders = await this.orderModel.findByCustomerId({ customerId: Number(customerId) });
         res.json(orders);
     };
+
+    updateStatus = async (req: Request, res: Response) => {
+      const { orderId } = req.params; 
+      const result = validatePartialOrder(req.body);
+  
+      if (!result.success) {
+          throw new ServerError({
+              name: ErrorsName.UnprocessableEntityException,
+              code: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+              message: JSON.parse(result.error.message),
+              logging: true,
+          });
+      }
+  
+      const updatedOrder = await this.orderModel.updateStatus({
+        ...result.data,
+        orderId: Number(orderId),
+      });
+      return res.json(updatedOrder);
+  };
+  
 }

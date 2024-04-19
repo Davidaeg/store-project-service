@@ -15,16 +15,16 @@ export class ColorModel {
   }
 
   async getAll() {
-    const products = await this.pool.request().query("SELECT * from Color");
-    return products.recordset;
+    const colors = await this.pool.request().query("SELECT * from Color");
+    return colors.recordset;
   }
 
   async getById({ id }: { id: number }) {
-    const product = await this.pool
+    const color = await this.pool
       .request()
       .input("input_parameter", sql.Int, id)
-      .query("SELECT * from Color where colorId = @input_parameter");
-    return product.recordset[0];
+      .query("SELECT * from Color where colorId = @input_parameter");  
+    return color.recordset[0];
   }
 
   async create(color: CreateColorDto) {
@@ -75,5 +75,23 @@ export class ColorModel {
       });
     }
     return input;
+  }
+
+  async getProductColors({ productId }: { productId: number }){
+    const productColors = await this.pool
+      .request()
+      .input("ProductId", sql.Int, productId)
+      .query("SELECT * FROM ProductColor WHERE productId = @ProductId");
+    const colors: any[] = [];
+
+    for (const productColor of productColors.recordset) {
+        const color = await this.pool
+          .request()
+          .input("input_parameter", sql.Int, productColor.colorId)
+          .query("SELECT * from Color where colorId = @input_parameter");
+        colors.push(color.recordset[0]);
+    }
+
+    return colors;
   }
 }

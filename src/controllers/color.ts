@@ -78,4 +78,10 @@ export class ColorController {
     });
     return res.json(updatedColor);
   };
+
+  getProductColors = async (req: Request, res: Response) => {
+    const { productId } = req.params;
+    const colors = await this.colorModel.getProductColors({ productId: Number(productId) });
+    res.json(colors);
+  };
 }

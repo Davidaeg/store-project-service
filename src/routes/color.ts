@@ -13,13 +13,16 @@ export const createColorRouter = ({
   const colorsRouter = Router();
 
   const colorsController = new ColorController(colorModel);
-
+  
+  //CRUD
   colorsRouter.get("/", colorsController.getAll);
   colorsRouter.post("/", colorsController.create);
-
   colorsRouter.get("/:id", colorsController.getById);
   colorsRouter.delete("/:id", colorsController.delete);
   colorsRouter.patch("/:id", colorsController.update);
+
+  //OTHER REQUESTS
+  colorsRouter.get("/product/:productId", colorsController.getProductColors)
 
   return colorsRouter;
 };
