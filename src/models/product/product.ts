@@ -15,8 +15,26 @@ export class ProductModel {
   }
 
   async getAll() {
-    const products = await this.pool.request().query("SELECT * from Product");
-    return products.recordset;
+    const productsFromDb = await this.pool.request().query(`SELECT P.*, C.color
+    FROM Product P
+    LEFT JOIN ProductColor PC ON P.productId = PC.productId
+    LEFT JOIN Color C ON PC.colorId = C.colorId
+    ORDER BY P.productId;`);
+
+    const products = [];
+    for (const row of productsFromDb.recordset) {
+      if (!products[row.productId]) {
+        products[row.productId] = {
+          ...row,
+          colors: [],
+        };
+      }
+      if (row.color) {
+        products[row.productId].colors.push(row.color);
+      }
+    }
+
+    return products.filter((product) => product);
   }
 
   async getById({ id }: { id: number }) {

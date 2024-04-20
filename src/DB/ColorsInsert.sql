@@ -1,0 +1,20 @@
+INSERT INTO Color (color) VALUES ('Blue');
+INSERT INTO Color (color) VALUES ('Green');
+INSERT INTO Color (color) VALUES ('Yellow');
+INSERT INTO Color (color) VALUES ('Purple');
+INSERT INTO Color (color) VALUES ('Orange');
+INSERT INTO Color (color) VALUES ('Pink');
+INSERT INTO Color (color) VALUES ('Cyan');
+INSERT INTO Color (color) VALUES ('Magenta');
+INSERT INTO Color (color) VALUES ('Brown');
+INSERT INTO Color (color) VALUES ('Black');
+INSERT INTO Color (color) VALUES ('White');
+INSERT INTO Color (color) VALUES ('Gray');
+INSERT INTO Color (color) VALUES ('Silver');
+INSERT INTO Color (color) VALUES ('Gold');
+INSERT INTO Color (color) VALUES ('Lavender');
+INSERT INTO Color (color) VALUES ('Teal');
+INSERT INTO Color (color) VALUES ('Maroon');
+INSERT INTO Color (color) VALUES ('Turquoise');
+INSERT INTO Color (color) VALUES ('Indigo');
+
